@@ -1,0 +1,23 @@
+name: NoteMusic
+version: '1.0'
+main: github.coolclk.notemusic.main
+prefix: NoteMusic
+load: STARTUP
+authors: [ CoolCLK ]
+description: Play music by note.
+commands:
+  notemusic:
+    description: /notemusic
+  nm:
+    description: /nm
+permissions:
+  notemusic.playmusic:
+    default: op
+  notemusic.stopmusic:
+    default: op
+  notemusic.importmusic:
+    default: op
+  notemusic.reload:
+    default: op
+  notemusic.debug:
+    default: op
