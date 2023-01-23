@@ -1,5 +1,5 @@
 name: NoteMusic
-version: '1.0'
+version: '1.1'
 main: github.coolclk.notemusic.main
 prefix: NoteMusic
 load: STARTUP
@@ -17,7 +17,9 @@ permissions:
     default: op
   notemusic.importmusic:
     default: op
-  notemusic.reload:
+  notemusic.removemusic:
     default: op
-  notemusic.debug:
+  notemusic.list:
+    default: op
+  notemusic.reload:
     default: op

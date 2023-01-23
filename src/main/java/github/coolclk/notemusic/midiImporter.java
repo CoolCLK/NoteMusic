@@ -1,5 +1,7 @@
 package github.coolclk.notemusic;
 
+import org.bukkit.Sound;
+
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequence;
@@ -26,25 +28,31 @@ public class midiImporter {
                 if (message instanceof ShortMessage) {
                     ShortMessage sm = (ShortMessage) message;
                     if (sm.getCommand() == NOTE_ON) {
-                        int key = sm.getData1(); //{"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"}
+                        int key = sm.getData1();
                         int velocity = sm.getData2();
                         float time = event.getTick();
-                        int channel = sm.getChannel(); //通道，下次一定弄（
-                        String sound = "BLOCK_NOTE_PLING"; //channel >= 0 && channel <= 23
-                        if (channel == 14) sound = "BLOCK_NOTE_BELL";
-                        else if (channel == 112) sound = "BLOCK_NOTE_CHIME";
-                        else if (channel >= 24 && channel <= 31) sound = "BLOCK_NOTE_GUITAR";
-                        else if ((channel >= 114 && channel <= 118) || (channel == 47)) sound = "BLOCK_NOTE_SNARE";
-                        else if (channel >= 32 && channel <= 39) sound = "BLOCK_NOTE_BASS";
-                        else if (channel >= 40 && channel <= 55) sound = "BLOCK_NOTE_HARP";
-                        else if (channel >= 72 && channel <= 79) sound = "BLOCK_NOTE_FLUTE";
-                        else if (channel == 13) sound = "BLOCK_NOTE_XYLOPHONE";
-                        pattern.add(sound + ":" + ((key - 48) * 0.0714285714285714) + ":" + velocity + ":" + time);
+                        int channel = sm.getChannel(); //通道，但是好像不起作用...?
+                        String sound = getSoundNameByChannel(channel);
+                        pattern.add(sound + ":" + key + ":" + velocity + ":" + time);
                     }
                 }
             }
         }
         return pattern;
+    }
+
+    public static String getSoundNameByChannel(int channel) {
+        String sound;
+        if (channel == 14) sound = "BLOCK_NOTE_BELL";
+        else if (channel == 112) sound = "BLOCK_NOTE_CHIME";
+        else if (channel >= 24 && channel <= 31) sound = "BLOCK_NOTE_GUITAR";
+        else if ((channel >= 114 && channel <= 118) || (channel == 47)) sound = "BLOCK_NOTE_SNARE";
+        else if (channel >= 32 && channel <= 39) sound = "BLOCK_NOTE_BASS";
+        else if (channel >= 40 && channel <= 55) sound = "BLOCK_NOTE_HARP";
+        else if (channel >= 72 && channel <= 79) sound = "BLOCK_NOTE_FLUTE";
+        else if (channel == 13) sound = "BLOCK_NOTE_XYLOPHONE";
+        else sound = "BLOCK_NOTE_PLING"; ////channel >= 0 && channel <= 23，以及更多的通道
+        return sound;
     }
 
     public static int getMidiTick(File file) throws InvalidMidiDataException, IOException {

@@ -11,16 +11,17 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class main extends JavaPlugin {
 
     public static FileConfiguration config = null;
     public static FileConfiguration music = null;
     public static FileConfiguration message = null;
-    public static BukkitRunnable playingMusic = null;
+    public static List<musicRunnable> playingMusic = new ArrayList();
     @Override
     public void onEnable() {
         this.getCommand("notemusic").setExecutor(new commandExecutor());
@@ -53,61 +54,85 @@ public class main extends JavaPlugin {
 
     public static int loadMusic() {
         Plugin mainPlugin = JavaPlugin.getProvidingPlugin(main.class);
-        main.stopMusic();
+        main.stopMusicAll();
         main.music = YamlConfiguration.loadConfiguration(new File(mainPlugin.getDataFolder(), "music.yml"));
         saveDefaultResource("mus/");
         return 0;
     }
 
     public static int playMusic(Player player, String musicName) {
-        player.sendMessage(main.config.getString("prefix") + String.format(main.message.getString("command-play-music"), musicName));
-        if (main.playingMusic != null) main.playingMusic.cancel();
-        main.playingMusic = new BukkitRunnable() {
-            int timer = 0;
-            int speed = main.music.getInt(musicName + ".speed");
-            final List<String> noteList = main.music.getStringList(musicName + ".note");
-            @Override
-            public void run() {
-                Bukkit.getOnlinePlayers().forEach(onlinePlayer -> {
-                    onlinePlayer.getWorld();
-                });
-                for (int i = 0; i < noteList.size(); i++) {
-                    String noteString = noteList.get(i);
-                    String[] noteArray = noteString.split(":");
-                    Location noteLocation = player.getLocation();
-                    Sound noteSound;
-                    try {
-                        noteSound = Sound.valueOf(noteArray[0].toUpperCase());
-                    } catch (IllegalArgumentException e) {
-                        noteSound = Sound.valueOf(noteArray[0].toUpperCase().replaceAll("NOTE", "NOTE_BLOCK"));
-                    }
-                    Sound finalNoteSound = noteSound;
-                    float notePitch = Float.parseFloat(noteArray[1]);
-                    int noteVolume = Integer.parseInt(noteArray[2]);
-                    float noteTime = Float.parseFloat(noteArray[3]);
-                    if (timer >= noteTime) {
-                        player.getWorld().playSound(noteLocation, //位置
-                                finalNoteSound, //乐器
-                                noteVolume, //音量
-                                notePitch); //音符
-                        noteList.remove(i);
-                        if (noteList.size() <= 0) main.stopMusic();
+        musicRunnable musicRun = new musicRunnable();
+        //获取运行Id
+        int tempMusicId = 0;
+        boolean tempMusicFindId = false;
+        int tempCheckMusicIndex = 0;
+        if (main.playingMusic.size() > 0) {
+            while (!tempMusicFindId) {
+                if (main.playingMusic.get(tempCheckMusicIndex).musicPlayId == tempMusicId) {
+                    tempMusicFindId = true;
+                }
+                else {
+                    if (tempCheckMusicIndex + 1 >= main.playingMusic.size()) {
+                        while (main.playingMusic.get(tempCheckMusicIndex).musicPlayId == tempMusicId) tempMusicId++;
+                        tempMusicFindId = true;
                     }
                 }
-                debugControl.synchronousMusicTimer(timer);
-                timer += speed * 0.083; //游戏刻
+                tempCheckMusicIndex++;
             }
-        };
-        main.playingMusic.runTaskTimerAsynchronously(JavaPlugin.getProvidingPlugin(main.class), 0, 0);
+        }
+        //设定Id
+        musicRun.musicPlayId = tempMusicId;
+        musicRun.run(musicName, player.getWorld(), player.getLocation());
+        main.playingMusic.add(musicRun);
         return 0;
     }
 
-    public static int stopMusic() {
+    public static int stopMusic(String name) {
         if (main.playingMusic != null) {
-            main.playingMusic.cancel();
-            main.playingMusic = null;
+            for (int i = 0; i < main.playingMusic.size(); i++) {
+                musicRunnable musicRunnable = main.playingMusic.get(i);
+                if (Objects.equals(musicRunnable.musicName, name)) {
+                    musicRunnable.stop();
+                    main.playingMusic.remove(i);
+                }
+            }
             return 1;
         }
+        return 0;
+    }
+
+    public static int stopMusic(int id) {
+        if (main.playingMusic != null) {
+            int index = 0;
+            int idIndex = -1;
+            for (musicRunnable mRunnable : main.playingMusic) {
+                if (mRunnable.musicPlayId == id) {
+                    idIndex = index;
+                }
+                index++;
+            }
+            main.playingMusic.get(idIndex).stop();
+            main.playingMusic.remove(idIndex);
+            return 1;
+        }
+        return 0;
+    }
+
+    public static int stopMusicAll() {
+        if (main.playingMusic != null) {
+            for (musicRunnable mRunnable : main.playingMusic) {
+                mRunnable.stop();
+            }
+            main.playingMusic = new ArrayList<>();
+            return 1;
+        }
+        return 0;
+    }
+
+    public static int removeMusic(String musicName) throws IOException {
+        main.music.set(musicName, null);
+        main.music.save(new File(main.getProvidingPlugin(main.class).getDataFolder(), "music.yml"));
+        main.loadMusic();
         return 0;
     }
 
@@ -132,7 +157,6 @@ public class main extends JavaPlugin {
         }
         return suffix;
     }
-
 
     public static String removeFilenameSuffix(String fileName) {
         return fileName.replace(getFilenameSuffix(fileName), "");
