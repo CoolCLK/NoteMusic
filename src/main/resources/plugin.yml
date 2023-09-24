@@ -1,6 +1,6 @@
 name: NoteMusic
 version: '${project.version}'
-main: github.coolclk.notemusic.main
+main: coolclk.notemusic.Main
 prefix: NoteMusic
 load: STARTUP
 authors: [ CoolCLK ]

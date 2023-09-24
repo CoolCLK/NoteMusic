@@ -1,2 +1,8 @@
-language: en
+# You can change this option to en_US, zh_CN, and the file on "lang" folder prefix is "message-" files.
+language: en_US
+
+# For command prefix
 prefix: '§7[§eNote§bMusic§7] '
+
+# You shouldn't touch this or you are the dev
+debug: false

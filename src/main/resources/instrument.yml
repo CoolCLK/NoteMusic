@@ -1,0 +1,23 @@
+# You can define channels here, format:
+# anyChannelName: 'minChannel..maxChannel'
+channels:
+  bell: '14'
+  chime: '112'
+  guitar: '24..31'
+  snare: '114..118'
+  bass: '32..39'
+  harp: '40..55'
+  flute: '72..79'
+  xylophone: '13'
+
+# You can modify here to change channels' sound (Also weird sounds?)
+sounds:
+  _DEFAULT_: 'BLOCK_NOTE_PLING'
+  bell: 'BLOCK_NOTE_BELL'
+  chime: 'BLOCK_NOTE_CHIME'
+  guitar: 'BLOCK_NOTE_GUITAR'
+  snare: 'BLOCK_NOTE_SNARE'
+  bass: 'BLOCK_NOTE_BASS'
+  harp: 'BLOCK_NOTE_HARP'
+  flute: 'BLOCK_NOTE_FLUTE'
+  xylophone: 'BLOCK_NOTE_XYLOPHONE'
