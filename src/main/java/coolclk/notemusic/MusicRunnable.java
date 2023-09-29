@@ -29,11 +29,13 @@ public class MusicRunnable {
                         float noteKey = Float.parseFloat(noteInfo[1]);
                         int noteVolume = Integer.parseInt(noteInfo[2]);
                         Sound noteSound = Main.getSoundByChannel(Integer.parseInt(noteInfo[0]));
-                        float notePitch = (float) Math.pow(2, ((((noteKey - 54) + 1) - 12) / 12));
-                        musicWorld.playSound(musicLocation, //位置
-                                noteSound, //乐器
-                                noteVolume, //音量
-                                notePitch); //音符
+                        if (noteSound != null) {
+                            float notePitch = (float) Math.pow(2, ((((noteKey - 54) + 1) - 12) / 12));
+                            musicWorld.playSound(musicLocation, //位置
+                                    noteSound, //乐器
+                                    noteVolume, //音量
+                                    notePitch); //音符
+                        }
                         noteList.remove(noteData);
                         if (noteList.isEmpty()) {
                             Main.stopMusic(musicPlayId);

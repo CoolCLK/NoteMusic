@@ -37,12 +37,13 @@ public class Main extends JavaPlugin {
                 if (channel >= channelIndex0 && channel <= channelIndex1) channelKey = channelName;
             } else if (Integer.parseInt(index) == channel) channelKey = channelName;
         }
-        if (channelKey == null) channelKey = Main.instrument.getConfigurationSection("sounds").getString("_DEFAULT_");
+        if (channelKey == null) channelKey = "_DEFAULT_";
         try {
-            return Sound.valueOf(channelKey.toUpperCase().replaceAll(" ", "_"));
-        }
-        catch (Exception e) {
-            return Sound.BLOCK_NOTE_PLING;
+            return Sound.valueOf(Main.instrument.getConfigurationSection("sounds").getString(channelKey).toUpperCase().replaceAll(" ", "_"));
+        } catch (Exception e) {
+            System.err.println("Cannot found channel sound \"" + channelKey + "\": ");
+            e.printStackTrace(System.err);
+            return null;
         }
     }
 
