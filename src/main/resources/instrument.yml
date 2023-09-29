@@ -11,6 +11,9 @@ channels:
   xylophone: '13'
 
 # You can modify here to change channels' sound (Also weird sounds?)
+# If you play music it throws exceptions, you can try change this map.
+# For example, if you are 1.8.8, you need change "_DEFAULT_" value to "NOTE_PLING"
+# More see the bukkit api document: https://hub.spigotmc.org/
 sounds:
   _DEFAULT_: 'BLOCK_NOTE_PLING'
   bell: 'BLOCK_NOTE_BELL'
