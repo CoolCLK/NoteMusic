@@ -4,22 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="81e6cf8f-c543-4421-acca-f2e94178aaa2" name="更改" comment="Update gui feature">
-      <change afterPath="$PROJECT_DIR$/src/main/java/coolclk/notemusic/EventListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/coolclk/notemusic/NoteMusicGui.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/ico/icon.ico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/ico/icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/coolclk/notemusic/CommandExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/coolclk/notemusic/CommandExecutor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/coolclk/notemusic/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/coolclk/notemusic/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/coolclk/notemusic/StringUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/coolclk/notemusic/StringUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/lang/message-en_US.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/lang/message-en_US.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/lang/message-zh_CN.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/lang/message-zh_CN.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/mus/Drop any midi file here" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mus/DROP_ANY_MIDI_FILE_HERE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
-    </list>
+    <list default="true" id="81e6cf8f-c543-4421-acca-f2e94178aaa2" name="更改" comment="Update gui feature" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -94,8 +79,27 @@
       <option name="project" value="LOCAL" />
       <updated>1695987691541</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Update gui feature">
+      <option name="closed" value="true" />
+      <created>1696159106729</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1696159106729</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Update IDEA config" />
