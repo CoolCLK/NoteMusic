@@ -11,15 +11,21 @@ commands:
   nm:
     description: /nm
 permissions:
-  notemusic.playmusic:
+  notemusic.command.playmusic:
     default: op
-  notemusic.stopmusic:
+  notemusic.command.stopmusic:
     default: op
-  notemusic.importmusic:
+  notemusic.command.importmusic:
     default: op
-  notemusic.removemusic:
+  notemusic.command.removemusic:
     default: op
-  notemusic.list:
+  notemusic.command.musiclist:
     default: op
-  notemusic.reload:
+  notemusic.command.playinglist:
     default: op
+  notemusic.command.reload:
+    default: op
+  notemusic.command.gui:
+    default: op
+  notemusic.command.help:
+    default: true

@@ -18,25 +18,30 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabCompleter {
+
     public final static CommandExecutor INSTANCE = new CommandExecutor();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        Boolean quiet = Arrays.asList(args).contains("--quiet");
+        boolean unknownCommand = false;
+        boolean quiet = Arrays.asList(args).contains("--quiet");
+        List<String> commandMessage = new ArrayList<>();
         if (args.length > 0) {
-            switch (args[0].toLowerCase()) {
-                case "help": {
-                    if (args.length > 1) {
-                        if (Main.message.isSet("command-help-" + args[1])) for (String message : Main.message.getStringList("command-help-" + args[1])) sender.sendMessage(message);
-                        else if (!quiet) sender.sendMessage(Main.config.getString("prefix") + Main.message.getString("command-enough-arg"));
+            if (sender.hasPermission("notemusic.command." + args[0])) {
+                switch (args[0].toLowerCase()) {
+                    case "gui": {
+                        if (sender instanceof Player) NoteMusicGui.open((Player) sender);
+                        else commandMessage.add(Main.message.getString("command-console"));
+                        break;
                     }
-                    else {
-                        if (!quiet) for (String message : Main.message.getStringList("command-help")) sender.sendMessage(message);
+                    case "help": {
+                        if (args.length > 1) {
+                            if (Main.message.isSet("command-help-" + args[1])) commandMessage.addAll(Main.message.getStringList("command-help-" + args[1]));
+                            else commandMessage.add(Main.message.getString("command-enough-arg"));
+                        } else commandMessage.addAll(Main.message.getStringList("command-help"));
+                        break;
                     }
-                    return true;
-                }
-                case "playmusic": {
-                    if (sender.hasPermission("notemusic.playmusic")) {
+                    case "playmusic": {
                         if (args.length > 1) {
                             if (Main.music.contains(args[1])) {
                                 final AtomicReference<World> world = new AtomicReference<>();
@@ -46,55 +51,51 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
                                     if (player != null) {
                                         world.set(player.getWorld());
                                         location.set(player.getLocation());
-                                    } else if (!quiet) sender.sendMessage(Main.config.getString("prefix") + Main.message.getString("command-unknown-player"));
+                                    } else commandMessage.add(Main.message.getString("command-unknown-player"));
                                 } else if (args.length >= 3) {
                                     if (StringUtil.isDouble(args[2]) && StringUtil.isDouble(args[3]) && StringUtil.isDouble(args[4])) {
                                         if (args.length >= 6) {
                                             World pWorld = Bukkit.getWorlds().stream().filter(w -> w.getName().equals(args[5])).findAny().orElse(null);
                                             if (pWorld != null) world.set(pWorld);
-                                            else if (!quiet) sender.sendMessage(Main.config.getString("prefix") + Main.message.getString("command-unknown-world"));
+                                            else commandMessage.add(Main.message.getString("command-unknown-world"));
                                         } else {
-                                            if (sender instanceof Player) {
-                                                world.set(((Player) sender).getWorld());
-                                            } else if (!quiet) sender.sendMessage(Main.config.getString("prefix") + Main.message.getString("command-console"));
+                                            if (sender instanceof Player) world.set(((Player) sender).getWorld());
+                                            else commandMessage.add(Main.message.getString("command-console"));
                                         }
-                                    } else if (!quiet) sender.sendMessage(Main.config.getString("prefix") + Main.message.getString("command-enough-arg"));
+                                    } else commandMessage.add(Main.message.getString("command-enough-arg"));
                                 } else {
                                     if (sender instanceof Player) {
                                         world.set(((Player) sender).getWorld());
                                         location.set(((Player) sender).getLocation());
-                                    } else if (!quiet) sender.sendMessage(Main.config.getString("prefix") + Main.message.getString("command-console"));
+                                    } else commandMessage.add(Main.message.getString("command-console"));
                                 }
                                 if (world.get() != null && location.get() != null) {
-                                    if (!quiet) sender.sendMessage(Main.config.getString("prefix") + String.format(Main.message.getString("command-play-music"), args[1]));
+                                    commandMessage.add(String.format(Main.message.getString("command-play-music"), args[1]));
                                     Main.playMusic(world.get(), location.get(), args[1]);
                                 }
-                            }
-                            else if (!quiet) sender.sendMessage(Main.config.getString("prefix") + Main.message.getString("command-unknown-music"));
-                        } else if (!quiet) sender.sendMessage(Main.config.getString("prefix") + Main.message.getString("command-enough-arg"));
+                            } else commandMessage.add(Main.message.getString("command-unknown-music"));
+                        } else commandMessage.add(Main.message.getString("command-enough-arg"));
+                        break;
                     }
-                    else if (!quiet) sender.sendMessage(Main.config.getString("prefix") + Main.message.getString("command-permission"));
-                    return true;
-                }
-                case "stopmusic": {
-                    if (sender.hasPermission("notemusic.stopmusic")) {
+                    case "stopmusic": {
                         if (args.length > 1) {
+                            /* Stop by music name
                             if (Main.music.contains(args[1])) {
-                                if (!quiet) sender.sendMessage(Main.config.getString("prefix") + String.format(Main.message.getString("command-stop-music"), args[1]));
+                                if (!quiet) commandMessage.add(Main.config.getString("prefix") + String.format(Main.message.getString("command-stop-musicByName"), args[1]));
                                 Main.stopMusic(args[1]);
                             }
-                            else if (!quiet) sender.sendMessage(Main.config.getString("prefix") + Main.message.getString("command-unknown-music"));
-                        }
-                        else {
-                            if (!quiet) sender.sendMessage(Main.config.getString("prefix") + Main.message.getString("command-stop-all-music"));
+                            else if (!quiet) commandMessage.add(Main.config.getString("prefix") + Main.message.getString("command-unknown-music"));
+                             */
+                            if (StringUtil.isInteger(args[1]) && Main.stopMusic(Integer.parseInt(args[1]))) commandMessage.add(String.format(Main.message.getString("command-stop-musicByPlayingId"), args[1]));
+                            else commandMessage.add(Main.message.getString("command-unknown-playingId"));
+
+                        } else {
+                            commandMessage.add(Main.message.getString("command-stop-all-music"));
                             Main.stopMusicAll();
                         }
+                        break;
                     }
-                    else if (!quiet) sender.sendMessage(Main.config.getString("prefix") + Main.message.getString("command-permission"));
-                    return true;
-                }
-                case "removemusic": {
-                    if (sender.hasPermission("notemusic.removemusic")) {
+                    case "removemusic": {
                         if (args.length > 1) {
                             if (Main.music.contains(args[1])) {
                                 try {
@@ -102,15 +103,11 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
                                 } catch (IOException e) {
                                     throw new RuntimeException(e);
                                 }
-                            }
-                            else if (!quiet) sender.sendMessage(Main.config.getString("prefix") + Main.message.getString("command-unknown-music"));
+                            } else commandMessage.add(Main.message.getString("command-unknown-music"));
                         }
+                        break;
                     }
-                    else if (!quiet) sender.sendMessage(Main.config.getString("prefix") + Main.message.getString("command-permission"));
-                    return true;
-                }
-                case "importmusic": {
-                    if (sender.hasPermission("notemusic.importmusic")) {
+                    case "importmusic": {
                         if (args.length > 1) {
                             Plugin mainPlugin = JavaPlugin.getProvidingPlugin(Main.class);
                             StringBuilder fileName = new StringBuilder();
@@ -119,60 +116,58 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
                                 if (i + 1 < args.length) fileName.append(" ");
                             }
                             if (Main.config.getBoolean("debug")) Bukkit.getConsoleSender().sendMessage(Main.config.getString("prefix") + "[Debug] Try import file \"" + fileName + "\".");
-                            if (Main.getImportMusic().contains(fileName.toString())) {
+                            if (Main.getUnreportedMusic().contains(fileName.toString())) {
                                 String fileSuffix = (Main.getFilenameSuffix(fileName.toString())).toUpperCase();
                                 if (fileSuffix.equals("MID") || fileSuffix.equals("MIDI")) {
-                                    if (!quiet) sender.sendMessage(Main.config.getString("prefix") + String.format(Main.message.getString("command-import-music"), fileName));
+                                    commandMessage.add(String.format(Main.message.getString("command-import-music"), fileName));
                                     try {
                                         MidiImporter.importMusic(fileName.toString());
-                                        if (Arrays.asList(args).contains("--quiet")) if (!quiet) sender.sendMessage(Main.config.getString("prefix") + String.format(Main.message.getString("command-import-success-music"), fileName));
+                                        commandMessage.add(String.format(Main.message.getString("command-import-success-music"), fileName));
                                     } catch (Exception e) {
                                         throw new RuntimeException(e);
                                     }
-                                }
-                                else if (!quiet) sender.sendMessage(Main.config.getString("prefix") + Main.message.getString("command-error-music-suffix"));
-                            }
-                            else if (!quiet) sender.sendMessage(Main.config.getString("prefix") + Main.message.getString("command-unknown-music"));
+                                } else commandMessage.add(Main.message.getString("command-error-music-suffix"));
+                            } else commandMessage.add(Main.message.getString("command-unknown-music"));
                             try {
                                 Main.music.save(new File(mainPlugin.getDataFolder(), "music.yml"));
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
-                        } else if (!quiet) sender.sendMessage(Main.config.getString("prefix") + Main.message.getString("command-enough-arg"));
+                        } else commandMessage.add(Main.message.getString("command-enough-arg"));
+                        break;
                     }
-                    else if (!quiet) sender.sendMessage(Main.config.getString("prefix") + Main.message.getString("command-permission"));
-                    return true;
-                }
-                case "list": {
-                    if (sender.hasPermission("notemusic.list")) {
-                        if (!quiet) sender.sendMessage(Main.config.getString("prefix") + String.format(Main.message.getString("command-list-counts"), Main.music.getKeys(false).size()));
-                        for (String key : Main.music.getKeys(false)) {
-                            if (sender instanceof Player) {
-                                String rawMessage = "[\"\",{\"text\":\"" + Main.config.getString("prefix") + " " + key + " \"}";
-                                if (sender.hasPermission("notemusic.playmusic")) rawMessage += ",{\"text\":\"" + Main.message.getString("command-list-play") + "\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + Main.message.getString("command-list-hover") + "\"},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/notemusic:notemusic playmusic " + key + "\"}},\" \"";
-                                if (sender.hasPermission("notemusic.stopmusic")) rawMessage += ",{\"text\":\"" + Main.message.getString("command-list-stop") + "\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + Main.message.getString("command-list-hover") + "\"},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/notemusic:notemusic stopmusic " + key + "\"}},\" \"";
-                                if (sender.hasPermission("notemusic.removemusic")) rawMessage += ",{\"text\":\"" + Main.message.getString("command-list-remove") + "\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + Main.message.getString("command-list-hover") + "\"},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/notemusic:notemusic removemusic " + key + "\"}},\" \"";
-                                rawMessage += "]";
-                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "minecraft:tellraw " + sender.getName() + " " + rawMessage);
-                            }
-                            else if (!quiet) sender.sendMessage(Main.config.getString("prefix") + " " + key);
+                    case "playinglist": {
+                        commandMessage.add(String.format(Main.message.getString("command-playinglist-counts"), Main.music.getKeys(false).size()));
+                        for (MusicRunnable runnable : Main.playingMusic) {
+                            commandMessage.add(String.format(Main.message.getString("command-playinglist-object"), runnable.musicName, runnable.musicPlayId));
                         }
+                        break;
                     }
-                    else if (!quiet) sender.sendMessage(Main.config.getString("prefix") + Main.message.getString("command-permission"));
-                    return true;
-                }
-                case "reload": {
-                    if (sender.hasPermission("notemusic.reload")) {
-                        if (!quiet) sender.sendMessage(Main.config.getString("prefix") + Main.message.getString("command-reload"));
-                        Main.loadPlugin(quiet);
-                        if (!quiet) sender.sendMessage(Main.config.getString("prefix") + Main.message.getString("command-reloaded"));
+                    case "musiclist": {
+                        commandMessage.add(String.format(Main.message.getString("command-musiclist-counts"), Main.music.getKeys(false).size()));
+                        commandMessage.addAll(Main.music.getKeys(false));
+                        break;
                     }
-                    else if (!quiet) sender.sendMessage(Main.config.getString("prefix") + Main.message.getString("command-permission"));
-                    return true;
+                    case "reload": {
+                        commandMessage.add(Main.message.getString("command-reload"));
+                        Main.loadPlugin();
+                        commandMessage.add(Main.message.getString("command-reloaded"));
+                        break;
+                    }
+                    default: {
+                        unknownCommand = true;
+                        break;
+                    }
                 }
+            } else commandMessage.add(Main.message.getString("command-permission"));
+        } else unknownCommand = true;
+        if (!quiet) {
+            if (unknownCommand) {
+                commandMessage.addAll(Main.message.getStringList("command-default"));
+                if (sender.getEffectivePermissions().stream().anyMatch(permissionAttachmentInfo -> permissionAttachmentInfo.getPermission().startsWith("notemusic."))) commandMessage.add(Main.message.getString("command-default-help"));
             }
+            commandMessage.forEach(message -> sender.sendMessage(Main.config.getString("prefix") + message));
         }
-        for (String message : Main.message.getStringList("command-help")) if (!quiet) sender.sendMessage(message);
         return true;
     }
 
@@ -182,35 +177,42 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
         switch (args.length) {
             case 1: {
                 list.add("help");
+                if (sender.hasPermission("notemusic.gui")) list.add("gui");
                 if (sender.hasPermission("notemusic.playmusic")) list.add("playmusic");
                 if (sender.hasPermission("notemusic.stopmusic")) list.add("stopmusic");
                 if (sender.hasPermission("notemusic.importmusic")) list.add("importmusic");
                 if (sender.hasPermission("notemusic.removemusic")) list.add("removemusic");
-                if (sender.hasPermission("notemusic.list")) list.add("list");
-                if (sender.hasPermission("notemusic.relaod")) list.add("reload");
+                if (sender.hasPermission("notemusic.playinglist")) list.add("playinglist");
+                if (sender.hasPermission("notemusic.musiclist")) list.add("musiclist");
+                if (sender.hasPermission("notemusic.reload")) list.add("reload");
                 break;
             }
             case 2: {
                 switch (args[0]) {
                     case "help": {
+                        if (sender.hasPermission("notemusic.gui")) list.add("gui");
                         if (sender.hasPermission("notemusic.playmusic")) list.add("playmusic");
                         if (sender.hasPermission("notemusic.stopmusic")) list.add("stopmusic");
                         if (sender.hasPermission("notemusic.importmusic")) list.add("importmusic");
                         if (sender.hasPermission("notemusic.removemusic")) list.add("removemusic");
-                        if (sender.hasPermission("notemusic.list")) list.add("list");
-                        if (sender.hasPermission("notemusic.relaod")) list.add("reload");
+                        if (sender.hasPermission("notemusic.playinglist")) list.add("playinglist");
+                        if (sender.hasPermission("notemusic.musiclist")) list.add("musiclist");
+                        if (sender.hasPermission("notemusic.reload")) list.add("reload");
                         break;
                     }
                     case "playmusic":
-                    case "stopmusic":
+                    // case "stopmusic": Stop by name
                     case "removemusic": {
-                        if (sender.hasPermission("notemusic.playmusic")) list.addAll(Main.music.getKeys(false));
+                        if (sender.hasPermission("notemusic." + args[0])) list.addAll(Main.music.getKeys(false));
+                        break;
+                    }
+                    case "stopmusic": {
+                        if (sender.hasPermission("notemusic.stopmusic")) Main.playingMusic.forEach(musicRunnable -> list.add(String.valueOf(musicRunnable.musicPlayId)));
                         break;
                     }
                     case "importmusic": {
                         if (sender.hasPermission("notemusic.importmusic")) {
-                            Main.getImportMusic();
-                            list.addAll(Main.getImportMusic());
+                            list.addAll(Main.getUnreportedMusic());
                         }
                         break;
                     }
@@ -244,6 +246,9 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
                 break;
             }
         }
+        new ArrayList<>(list).forEach(tab -> {
+            if (!tab.startsWith(args[args.length - 1])) list.remove(tab);
+        });
         return list;
     }
 }

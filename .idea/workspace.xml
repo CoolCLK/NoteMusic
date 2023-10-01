@@ -4,19 +4,50 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="81e6cf8f-c543-4421-acca-f2e94178aaa2" name="更改" comment="Update IDEA config">
-      <change beforePath="$PROJECT_DIR$/src/main/resources/instrument.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/instrument.yml" afterDir="false" />
+    <list default="true" id="81e6cf8f-c543-4421-acca-f2e94178aaa2" name="更改" comment="Update gui feature">
+      <change afterPath="$PROJECT_DIR$/src/main/java/coolclk/notemusic/EventListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/coolclk/notemusic/NoteMusicGui.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/ico/icon.ico" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/ico/icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/coolclk/notemusic/CommandExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/coolclk/notemusic/CommandExecutor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/coolclk/notemusic/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/coolclk/notemusic/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/coolclk/notemusic/StringUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/coolclk/notemusic/StringUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/lang/message-en_US.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/lang/message-en_US.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/lang/message-zh_CN.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/lang/message-zh_CN.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mus/Drop any midi file here" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mus/DROP_ANY_MIDI_FILE_HERE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <hideBySeverity>
+      <option value="11" />
+      <option value="12" />
+      <option value="13" />
+      <option value="14" />
+      <option value="15" />
+      <option value="16" />
+    </hideBySeverity>
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
@@ -26,13 +57,26 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/mrche/IdeaProjects/NoteMusic/src/main/resources/lang",
+    "project.structure.last.edited": "模块",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.0"
   }
-}</component>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\mrche\IdeaProjects\NoteMusic\src\main\resources\lang" />
+      <recent name="C:\Users\mrche\IdeaProjects\NoteMusic" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\mrche\IdeaProjects\NoteMusic\src\main\resources\ico" />
+    </key>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="默认任务">
@@ -55,6 +99,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Update IDEA config" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update IDEA config" />
+    <MESSAGE value="Update gui feature" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update gui feature" />
   </component>
 </project>

@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class Main extends JavaPlugin {
     public static FileConfiguration config = null, instrument = null, music = null, message = null;
@@ -21,11 +20,13 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        Bukkit.getPluginManager().registerEvents(EventListener.INSTANCE, this);
+
         this.getCommand("notemusic").setExecutor(CommandExecutor.INSTANCE);
         this.getCommand("nm").setExecutor(CommandExecutor.INSTANCE);
         this.getCommand("notemusic").setTabCompleter(CommandExecutor.INSTANCE);
         this.getCommand("nm").setTabCompleter(CommandExecutor.INSTANCE);
-        loadPlugin(false);
+        loadPlugin();
     }
 
     public static Sound getSoundByChannel(int channel) {
@@ -47,23 +48,21 @@ public class Main extends JavaPlugin {
         }
     }
 
-    public static void loadPlugin(Boolean quiet) {
+    public static void loadPlugin() {
         Plugin mainPlugin = JavaPlugin.getProvidingPlugin(Main.class);
         Main.saveDefaultResource("config.yml");
         Main.saveDefaultResource("music.yml");
         Main.saveDefaultResource("instrument.yml");
         Main.saveDefaultResource("lang/message-en_US.yml");
         Main.saveDefaultResource("lang/message-zh_CN.yml");
-        Main.saveDefaultResource("mus/Drop any midi file here");
+        Main.saveDefaultResource("mus/DROP_ANY_MIDI_FILE_HERE");
         Main.config = YamlConfiguration.loadConfiguration(new File(mainPlugin.getDataFolder(), "config.yml"));
         Main.instrument = YamlConfiguration.loadConfiguration(new File(mainPlugin.getDataFolder(), "instrument.yml"));
         Main.message = YamlConfiguration.loadConfiguration(new File(mainPlugin.getDataFolder(), "lang/message-" + Main.config.getString("language") + ".yml"));
         loadMusic();
-        if (!quiet) {
-            Bukkit.getConsoleSender().sendMessage(config.getString("prefix") + String.format(message.getString("load-music"), music.getKeys(false).size()));
-            for (String key : music.getKeys(false)) {
-                Bukkit.getConsoleSender().sendMessage(config.getString("prefix") + " - " + key);
-            }
+        Bukkit.getConsoleSender().sendMessage(config.getString("prefix") + String.format(message.getString("load-music"), music.getKeys(false).size()));
+        for (String key : music.getKeys(false)) {
+            Bukkit.getConsoleSender().sendMessage(config.getString("prefix") + " - " + key);
         }
     }
 
@@ -71,7 +70,7 @@ public class Main extends JavaPlugin {
         Plugin mainPlugin = JavaPlugin.getProvidingPlugin(Main.class);
         Main.stopMusicAll();
         Main.music = YamlConfiguration.loadConfiguration(new File(mainPlugin.getDataFolder(), "music.yml"));
-        saveDefaultResource("mus/Drop any midi file here");
+        saveDefaultResource("mus/DROP_ANY_MIDI_FILE_HERE");
     }
 
     public static void playMusic(World playWorld, Location playLocation, String musicName) {
@@ -99,6 +98,7 @@ public class Main extends JavaPlugin {
         Main.playingMusic.add(musicRun);
     }
 
+    /* Stop by name
     public static void stopMusic(String name) {
         for (MusicRunnable musicRunnable : Main.playingMusic.toArray(new MusicRunnable[0])) {
             if (Objects.equals(musicRunnable.musicName, name)) {
@@ -107,8 +107,9 @@ public class Main extends JavaPlugin {
             }
         }
     }
+     */
 
-    public static void stopMusic(int id) {
+    public static boolean stopMusic(int id) {
         int index = 0;
         int idIndex = -1;
         for (MusicRunnable mRunnable : Main.playingMusic) {
@@ -117,8 +118,10 @@ public class Main extends JavaPlugin {
             }
             index++;
         }
+        if (idIndex < 0) return false;
         Main.playingMusic.get(idIndex).stop();
         Main.playingMusic.remove(idIndex);
+        return true;
     }
 
     public static void stopMusicAll() {
@@ -134,14 +137,15 @@ public class Main extends JavaPlugin {
         Main.loadMusic();
     }
 
-    public static List<String> getImportMusic() {
+    public static List<String> getUnreportedMusic() {
         List<String> filesList = new ArrayList<>();
         File musicDir = new File(Main.getProvidingPlugin(Main.class).getDataFolder(), "mus");
         String[] files = musicDir.list();
         if (files != null) {
             for (String s : files) {
                 File file = new File(musicDir, s);
-                if (file.isFile()) filesList.add(file.getName());
+                String expandName = getFilenameSuffix(file.getName()).toUpperCase();
+                if (file.isFile() && (expandName.equals("MIDI") || expandName.equals("MID"))) filesList.add(file.getName());
             }
         }
         return filesList;
