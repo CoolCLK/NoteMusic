@@ -9,10 +9,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Main extends JavaPlugin {
     public static FileConfiguration config = null, instrument = null, music = null, message = null;
@@ -50,12 +50,12 @@ public class Main extends JavaPlugin {
 
     public static void loadPlugin() {
         Plugin mainPlugin = JavaPlugin.getProvidingPlugin(Main.class);
-        Main.saveDefaultResource("config.yml");
-        Main.saveDefaultResource("music.yml");
-        Main.saveDefaultResource("instrument.yml");
-        Main.saveDefaultResource("lang/message-en_US.yml");
-        Main.saveDefaultResource("lang/message-zh_CN.yml");
-        Main.saveDefaultResource("mus/DROP_ANY_MIDI_FILE_HERE");
+        Main.saveDefaultResource("config.yml", true);
+        Main.saveDefaultResource("music.yml", true);
+        Main.saveDefaultResource("instrument.yml", true);
+        Main.saveDefaultResource("lang/message-en_US.yml", false);
+        Main.saveDefaultResource("lang/message-zh_CN.yml", false);
+        Main.saveDefaultFolder("mus");
         Main.config = YamlConfiguration.loadConfiguration(new File(mainPlugin.getDataFolder(), "config.yml"));
         Main.instrument = YamlConfiguration.loadConfiguration(new File(mainPlugin.getDataFolder(), "instrument.yml"));
         Main.message = YamlConfiguration.loadConfiguration(new File(mainPlugin.getDataFolder(), "lang/message-" + Main.config.getString("language") + ".yml"));
@@ -70,29 +70,17 @@ public class Main extends JavaPlugin {
         Plugin mainPlugin = JavaPlugin.getProvidingPlugin(Main.class);
         Main.stopMusicAll();
         Main.music = YamlConfiguration.loadConfiguration(new File(mainPlugin.getDataFolder(), "music.yml"));
-        saveDefaultResource("mus/DROP_ANY_MIDI_FILE_HERE");
+        Main.saveDefaultFolder("mus");
     }
 
     public static void playMusic(World playWorld, Location playLocation, String musicName) {
         MusicRunnable musicRun = new MusicRunnable();
-        int tempMusicId = 0;
-        boolean tempMusicFindId = false;
-        int tempCheckMusicIndex = 0;
-        if (!Main.playingMusic.isEmpty()) {
-            while (!tempMusicFindId) {
-                if (Main.playingMusic.get(tempCheckMusicIndex).musicPlayId == tempMusicId) {
-                    tempMusicFindId = true;
-                }
-                else {
-                    if (tempCheckMusicIndex + 1 >= Main.playingMusic.size()) {
-                        while (Main.playingMusic.get(tempCheckMusicIndex).musicPlayId == tempMusicId) tempMusicId++;
-                        tempMusicFindId = true;
-                    }
-                }
-                tempCheckMusicIndex++;
+        int tempMusicId = new Random().nextInt(Main.playingMusic.size() * 10);
+        for (MusicRunnable runnable : Main.playingMusic) {
+            while (tempMusicId == runnable.musicPlayId) {
+                tempMusicId = new Random().nextInt(Main.playingMusic.size() * 10);
             }
         }
-        //设定Id
         musicRun.musicPlayId = tempMusicId;
         musicRun.run(musicName, playWorld, playLocation);
         Main.playingMusic.add(musicRun);
@@ -164,9 +152,19 @@ public class Main extends JavaPlugin {
         return fileName.replace(getFilenameSuffix(fileName), "");
     }
 
-    public static void saveDefaultResource(String resourcePath) {
-        if (!(new File(Main.getProvidingPlugin(Main.class).getDataFolder(), resourcePath).exists())) {
-            Main.getProvidingPlugin(Main.class).saveResource(resourcePath, false);
+    public static void saveDefaultResource(String resourcePath, boolean onlyWarning) {
+        boolean replace = false;
+        if (new File(Main.getProvidingPlugin(Main.class).getDataFolder(), resourcePath).exists()) {
+            YamlConfiguration newConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(Main.getProvidingPlugin(Main.class).getResource(resourcePath))), oldConfig = YamlConfiguration.loadConfiguration(new File(Main.getProvidingPlugin(Main.class).getDataFolder(), resourcePath));
+            if (!oldConfig.contains("version") || !newConfig.getString("version").equals(oldConfig.getString("version"))) {
+                replace = !onlyWarning;
+                if (onlyWarning) Bukkit.getConsoleSender().sendMessage("§7[§eNote§bMusic§7] §eWarning! The config file " + resourcePath + " version was different from the plugin version");
+            }
         }
+        Main.getProvidingPlugin(Main.class).saveResource(resourcePath, replace);
+    }
+
+    public static void saveDefaultFolder(String folderPath) {
+        new File(Main.getProvidingPlugin(Main.class).getDataFolder(), folderPath).mkdirs();
     }
 }

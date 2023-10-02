@@ -1,3 +1,6 @@
+# Don't touch this
+version: '${project.version}'
+
 # You can change this option to en_US, zh_CN, and the file on "lang" folder prefix is "message-" files.
 language: en_US
 

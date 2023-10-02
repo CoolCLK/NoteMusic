@@ -26,8 +26,9 @@ public class NoteMusicGui {
                 this.slot = slot;
             }
 
-            public void setClickAction(ClickAction click) {
+            public GuiItem setClickAction(ClickAction click) {
                 this.click = click;
+                return this;
             }
 
             public ClickAction getClickAction() {
@@ -65,10 +66,11 @@ public class NoteMusicGui {
             return this.owner;
         }
 
-        public void removeItems() {
+        public Gui removeItems() {
             for (int i = 0; i < inventory.getSize(); i++) {
                 inventory.setItem(0, null);
             }
+            return this;
         }
 
         public GuiItem addItem(int x, int y, ItemStack item) {
@@ -100,11 +102,12 @@ public class NoteMusicGui {
             return this.addItem(x, y, item);
         }
 
-        public void recreateInventory(int rows, String title) {
+        public Gui recreateInventory(int rows, String title) {
             this.getItems().clear();
             this.inventory = Bukkit.createInventory(this.getOwner(), Helper.getInventorySize(rows), title);
             this.getOwner().closeInventory();
             this.getOwner().openInventory(this.getInventory());
+            return this;
         }
     }
 
@@ -169,11 +172,16 @@ public class NoteMusicGui {
                     gui.getOwner().performCommand("notemusic:notemusic reload");
                     return false;
                 });
+        gui.addItem(8, 3,
+                        Material.REDSTONE_LAMP_OFF, 1, (short) 0,
+                        Main.message.getString("inventory-main-reload-name"),
+                        gui.getOwner().hasPermission("notemusic.command.reload") ? Main.message.getStringList("inventory-main-clickDo-lore") : Main.message.getStringList("inventory-main-noPermission-lore"))
+                .setClickAction(() -> false);
     }
 
     private static void changeGuiPlayMusic(Gui gui, int page) {
         if (!gui.getOwner().hasPermission("notemusic.command.playmusic")) return;
-        gui.recreateInventory(6, Main.message.getString("inventory-main-title"));
+        gui.recreateInventory(6, Main.message.getString("inventory-main-title")).removeItems();
         for (int i = 0; i <= 8; i++) gui.addItem(i, 4, Material.STAINED_GLASS_PANE, 1, (short) 0, "§r", Collections.emptyList());
         int pageLength = (int) (Math.floor(Main.music.getKeys(false).size() / 36D) + 1);
         if (page - 1 >= 0) gui.addItem(2, 5, Material.ARROW, 1, (short) 0, Main.message.getString("inventory-playmusic-previousPage-name"), Main.message.getStringList("inventory-main-clickDo-lore")).setClickAction(() -> {
@@ -205,7 +213,7 @@ public class NoteMusicGui {
 
     private static void changeGuiStopMusic(Gui gui, int page) {
         if (!gui.getOwner().hasPermission("notemusic.command.stopmusic")) return;
-        gui.recreateInventory(6, Main.message.getString("inventory-main-title"));
+        gui.recreateInventory(6, Main.message.getString("inventory-main-title")).removeItems();
         for (int i = 0; i <= 8; i++) gui.addItem(i, 4, Material.STAINED_GLASS_PANE, 1, (short) 0, "§r", Collections.emptyList());
         int pageLength = (int) (Math.floor(Main.playingMusic.size() / 36D) + 1);
         if (page - 1 >= 0) gui.addItem(2, 5, Material.ARROW, 1, (short) 0, Main.message.getString("inventory-stopmusic-previousPage-name"), Main.message.getStringList("inventory-main-clickDo-lore")).setClickAction(() -> {
@@ -237,7 +245,7 @@ public class NoteMusicGui {
 
     private static void changeGuiImportMusic(Gui gui, int page) {
         if (!gui.getOwner().hasPermission("notemusic.command.importmusic")) return;
-        gui.recreateInventory(6, Main.message.getString("inventory-main-title"));
+        gui.recreateInventory(6, Main.message.getString("inventory-main-title")).removeItems();
         for (int i = 0; i <= 8; i++) gui.addItem(i, 4, Material.STAINED_GLASS_PANE, 1, (short) 0, "§r", Collections.emptyList());
         int pageLength = (int) (Math.floor(Main.music.getKeys(false).size() / 36D) + 1);
         if (page - 1 >= 0) gui.addItem(2, 5, Material.ARROW, 1, (short) 0, Main.message.getString("inventory-importmusic-previousPage-name"), Main.message.getStringList("inventory-main-clickDo-lore")).setClickAction(() -> {
@@ -266,7 +274,7 @@ public class NoteMusicGui {
 
     private static void changeGuiRemoveMusic(Gui gui, int page) {
         if (!gui.getOwner().hasPermission("notemusic.command.removemusic")) return;
-        gui.recreateInventory(6, Main.message.getString("inventory-main-title"));
+        gui.recreateInventory(6, Main.message.getString("inventory-main-title")).removeItems();
         for (int i = 0; i <= 8; i++) gui.addItem(i, 4, Material.STAINED_GLASS_PANE, 1, (short) 0, "§r", Collections.emptyList());
         int pageLength = (int) (Math.floor(Main.music.getKeys(false).size() / 36D) + 1);
         if (page - 1 >= 0) gui.addItem(2, 5, Material.ARROW, 1, (short) 0, Main.message.getString("inventory-removemusic-previousPage-name"), Main.message.getStringList("inventory-main-clickDo-lore")).setClickAction(() -> {

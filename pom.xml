@@ -6,7 +6,7 @@
 
     <groupId>github.coolclk</groupId>
     <artifactId>notemusic</artifactId>
-    <version>1.3</version>
+    <version>1.4</version>
     <packaging>jar</packaging>
 
     <name>NoteMusic</name>

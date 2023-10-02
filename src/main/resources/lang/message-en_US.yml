@@ -1,3 +1,5 @@
+version: '${project.version}'
+
 load-music: 'Load the music (%s in total) .'
 command-default:
   - '§eNote§bMusic §ais running on the server!'

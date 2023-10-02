@@ -1,3 +1,5 @@
+version: '${project.version}'
+
 load-music: '加载音乐中 (共 %s 首)'
 command-default:
   - '§eNote§bMusic §a正在此服务器运行中!'
