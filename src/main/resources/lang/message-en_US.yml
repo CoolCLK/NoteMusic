@@ -77,6 +77,7 @@ inventory-main-stopmusic-name: '§e§lStop music'
 inventory-main-importmusic-name: '§e§lImport music'
 inventory-main-removemusic-name: '§e§lRemove music'
 inventory-main-reload-name: '§c§lReload'
+inventory-main-close-name: '§cClose menu'
 inventory-main-click-lore:
   - '§7§oClick to view'
 inventory-main-clickDo-lore:

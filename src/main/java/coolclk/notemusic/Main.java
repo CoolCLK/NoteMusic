@@ -75,15 +75,17 @@ public class Main extends JavaPlugin {
 
     public static void playMusic(World playWorld, Location playLocation, String musicName) {
         MusicRunnable musicRun = new MusicRunnable();
-        int tempMusicId = new Random().nextInt(Main.playingMusic.size() * 10);
-        for (MusicRunnable runnable : Main.playingMusic) {
-            while (tempMusicId == runnable.musicPlayId) {
-                tempMusicId = new Random().nextInt(Main.playingMusic.size() * 10);
+        if (!Main.playingMusic.isEmpty()) {
+            int tempMusicId = (int) (Math.random() * Main.playingMusic.size() * 10);
+            for (MusicRunnable runnable : Main.playingMusic) {
+                while (tempMusicId == runnable.musicPlayId) {
+                    tempMusicId = new Random().nextInt(Main.playingMusic.size() * 10);
+                }
             }
+            musicRun.musicPlayId = tempMusicId;
+            musicRun.run(musicName, playWorld, playLocation);
+            Main.playingMusic.add(musicRun);
         }
-        musicRun.musicPlayId = tempMusicId;
-        musicRun.run(musicName, playWorld, playLocation);
-        Main.playingMusic.add(musicRun);
     }
 
     /* Stop by name
@@ -158,7 +160,7 @@ public class Main extends JavaPlugin {
             YamlConfiguration newConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(Main.getProvidingPlugin(Main.class).getResource(resourcePath))), oldConfig = YamlConfiguration.loadConfiguration(new File(Main.getProvidingPlugin(Main.class).getDataFolder(), resourcePath));
             if (!oldConfig.contains("version") || !newConfig.getString("version").equals(oldConfig.getString("version"))) {
                 replace = !onlyWarning;
-                if (onlyWarning) Bukkit.getConsoleSender().sendMessage("§7[§eNote§bMusic§7] §eWarning! The config file " + resourcePath + " version was different from the plugin version");
+                Bukkit.getConsoleSender().sendMessage("§7[§eNote§bMusic§7] §eWarning! The config file " + resourcePath + " version was different from the plugin version" + (onlyWarning ? "" : ", plugin will replace it."));
             }
         }
         Main.getProvidingPlugin(Main.class).saveResource(resourcePath, replace);

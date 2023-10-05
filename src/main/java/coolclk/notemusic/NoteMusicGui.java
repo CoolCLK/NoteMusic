@@ -174,8 +174,8 @@ public class NoteMusicGui {
                 });
         gui.addItem(8, 3,
                         Material.REDSTONE_LAMP_OFF, 1, (short) 0,
-                        Main.message.getString("inventory-main-reload-name"),
-                        gui.getOwner().hasPermission("notemusic.command.reload") ? Main.message.getStringList("inventory-main-clickDo-lore") : Main.message.getStringList("inventory-main-noPermission-lore"))
+                        Main.message.getString("inventory-main-close-name"),
+                        Main.message.getStringList("inventory-main-clickDo-lore"))
                 .setClickAction(() -> false);
     }
 
@@ -209,6 +209,14 @@ public class NoteMusicGui {
                     });
             slot++;
         }
+        gui.addItem(8, 5,
+                        Material.REDSTONE_LAMP_OFF, 1, (short) 0,
+                        Main.message.getString("inventory-main-close-name"),
+                        Main.message.getStringList("inventory-main-clickDo-lore"))
+                .setClickAction(() -> {
+                    changeGuiMainMenu(gui);
+                    return true;
+                });
     }
 
     private static void changeGuiStopMusic(Gui gui, int page) {
@@ -241,6 +249,14 @@ public class NoteMusicGui {
                     });
             slot++;
         }
+        gui.addItem(8, 5,
+                        Material.REDSTONE_LAMP_OFF, 1, (short) 0,
+                        Main.message.getString("inventory-main-close-name"),
+                        Main.message.getStringList("inventory-main-clickDo-lore"))
+                .setClickAction(() -> {
+                    changeGuiMainMenu(gui);
+                    return true;
+                });
     }
 
     private static void changeGuiImportMusic(Gui gui, int page) {
@@ -270,6 +286,14 @@ public class NoteMusicGui {
                     });
             slot++;
         }
+        gui.addItem(8, 5,
+                        Material.REDSTONE_LAMP_OFF, 1, (short) 0,
+                        Main.message.getString("inventory-main-close-name"),
+                        Main.message.getStringList("inventory-main-clickDo-lore"))
+                .setClickAction(() -> {
+                    changeGuiMainMenu(gui);
+                    return true;
+                });
     }
 
     private static void changeGuiRemoveMusic(Gui gui, int page) {
@@ -299,5 +323,13 @@ public class NoteMusicGui {
                     });
             slot++;
         }
+        gui.addItem(8, 5,
+                        Material.REDSTONE_LAMP_OFF, 1, (short) 0,
+                        Main.message.getString("inventory-main-close-name"),
+                        Main.message.getStringList("inventory-main-clickDo-lore"))
+                .setClickAction(() -> {
+                    changeGuiMainMenu(gui);
+                    return true;
+                });
     }
 }

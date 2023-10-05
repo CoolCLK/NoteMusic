@@ -4,15 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="81e6cf8f-c543-4421-acca-f2e94178aaa2" name="更改" comment="Update gui feature">
+    <list default="true" id="81e6cf8f-c543-4421-acca-f2e94178aaa2" name="更改" comment="Update configuration version check">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/coolclk/notemusic/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/coolclk/notemusic/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/coolclk/notemusic/NoteMusicGui.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/coolclk/notemusic/NoteMusicGui.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/lang/message-en_US.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/lang/message-en_US.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/lang/message-zh_CN.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/lang/message-zh_CN.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/mus/DROP_ANY_MIDI_FILE_HERE" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,7 +101,15 @@
       <option name="project" value="LOCAL" />
       <updated>1696159515371</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Update configuration version check">
+      <option name="closed" value="true" />
+      <created>1696219556341</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1696219556341</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -121,6 +126,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Update IDEA config" />
     <MESSAGE value="Update gui feature" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update gui feature" />
+    <MESSAGE value="Update configuration version check" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update configuration version check" />
   </component>
 </project>

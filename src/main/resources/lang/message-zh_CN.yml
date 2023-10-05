@@ -77,6 +77,7 @@ inventory-main-stopmusic-name: '§e§l停止播放'
 inventory-main-importmusic-name: '§e§l导入音乐'
 inventory-main-removemusic-name: '§e§l移除音乐'
 inventory-main-reload-name: '§c§l重载插件'
+inventory-main-close-name: '§c关闭界面'
 inventory-main-click-lore:
   - '§7§o点击查看'
 inventory-main-clickDo-lore:
